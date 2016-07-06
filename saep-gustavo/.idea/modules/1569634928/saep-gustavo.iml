@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="saep-gustavo" external.linked.project.path="/media/Arquivos_do_Windows_8.1/Users/Gustavo/Dropbox/Tarefas/7 Período/Software para Persistência/SAEP/saep-gustavo" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="persistencia" external.system.module.version="0.1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file:///media/Arquivos_do_Windows_8.1/Users/Gustavo/Dropbox/Tarefas/7 Período/Software para Persistência/SAEP/saep-gustavo">
+      <excludeFolder url="file:///media/Arquivos_do_Windows_8.1/Users/Gustavo/Dropbox/Tarefas/7 Período/Software para Persistência/SAEP/saep-gustavo/.gradle" />
+      <excludeFolder url="file:///media/Arquivos_do_Windows_8.1/Users/Gustavo/Dropbox/Tarefas/7 Período/Software para Persistência/SAEP/saep-gustavo/build" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
