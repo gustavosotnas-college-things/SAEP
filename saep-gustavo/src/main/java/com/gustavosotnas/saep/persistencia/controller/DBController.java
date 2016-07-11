@@ -12,12 +12,16 @@ public class DBController {
     public static MongoClient mongoClient =  new MongoClient();
     public static MongoDatabase db = mongoClient.getDatabase("saep");
 
-    public static void createCollections(){
+    /**
+     * Função que inicializa o MongoDB com as collections usadas no SAEP.
+     */
+    public static void initializeDB(){
         try{
             db.createCollection(Collections.PARECER_COLLECTION);
             db.createCollection(Collections.RESOLUCAO_COLLECTION);
+            System.out.println("Colletions criadas com sucesso");
         } catch (MongoCommandException e){
-            System.out.println("Collections já criadas");
+            System.out.println("Collections já criadas anteriormente");
         }
     }
 }
