@@ -1,5 +1,6 @@
 package com.gustavosotnas.saep.persistencia;
 
+import com.gustavosotnas.saep.persistencia.properties.Collections;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCommandException;
 import com.mongodb.client.MongoDatabase;
@@ -13,8 +14,8 @@ public class SAEP_DAO {
 
     public static void createCollections(){
         try{
-            db.createCollection(Strings.PARECER_COLLECTION);
-            db.createCollection(Strings.RESOLUCAO_COLLECTION);
+            db.createCollection(Collections.PARECER_COLLECTION);
+            db.createCollection(Collections.RESOLUCAO_COLLECTION);
         } catch (MongoCommandException e){
             System.out.println("Collections já criadas");
         }
