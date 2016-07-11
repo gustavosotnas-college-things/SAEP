@@ -14,4 +14,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.github.kyriosdata.saep/saep-dominio
     compile group: 'com.github.kyriosdata.saep', name: 'saep-dominio', version: '1.0.3'
+
+    // https://mvnrepository.com/artifact/org.mongodb/mongodb-driver
+    compile group: 'org.mongodb', name: 'mongodb-driver', version: '3.2.2'
 }
