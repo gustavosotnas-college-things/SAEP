@@ -3,6 +3,8 @@ package com.gustavosotnas.saep.persistencia.controller;
 import com.gustavosotnas.saep.persistencia.model.Collections;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCommandException;
+import com.mongodb.MongoSocketOpenException;
+import com.mongodb.MongoTimeoutException;
 import com.mongodb.client.MongoDatabase;
 
 /**
@@ -15,13 +17,15 @@ public class DBController {
     /**
      * Função que inicializa o MongoDB com as collections usadas no SAEP.
      */
-    public static void initializeDB(){
-        try{
+    public static void initializeDB() {
+        try {
             db.createCollection(Collections.PARECER_COLLECTION);
             db.createCollection(Collections.RESOLUCAO_COLLECTION);
             System.out.println("Colletions criadas com sucesso");
-        } catch (MongoCommandException e){
+        } catch (MongoCommandException mongocmdex) {
             System.out.println("Collections já criadas anteriormente");
+        } catch (MongoSocketOpenException | MongoTimeoutException mongoconnex){
+            System.out.println("Não foi possível conectar ao servidor de banco de dados. Ele está rodando?");
         }
     }
 }
