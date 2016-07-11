@@ -1,6 +1,6 @@
-package com.gustavosotnas.saep.persistencia;
+package com.gustavosotnas.saep.persistencia.controller;
 
-import com.gustavosotnas.saep.persistencia.properties.Collections;
+import com.gustavosotnas.saep.persistencia.model.Collections;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCommandException;
 import com.mongodb.client.MongoDatabase;
@@ -8,7 +8,7 @@ import com.mongodb.client.MongoDatabase;
 /**
  * Created by gustavosotnas on 10/07/16.
  */
-public class SAEP_DAO {
+public class DBController {
     public static MongoClient mongoClient =  new MongoClient();
     public static MongoDatabase db = mongoClient.getDatabase("saep");
 

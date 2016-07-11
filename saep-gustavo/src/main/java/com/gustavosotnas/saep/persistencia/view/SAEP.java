@@ -1,4 +1,4 @@
-package com.gustavosotnas.saep;
+package com.gustavosotnas.saep.persistencia.view;
 
 /**
  * Created by gustavosotnas on 10/07/16.
