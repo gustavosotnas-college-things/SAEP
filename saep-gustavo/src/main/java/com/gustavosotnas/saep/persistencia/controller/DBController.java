@@ -1,6 +1,6 @@
 package com.gustavosotnas.saep.persistencia.controller;
 
-import com.gustavosotnas.saep.persistencia.model.Collections;
+import com.gustavosotnas.saep.persistencia.model.properties.Collections;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCommandException;
 import com.mongodb.MongoSocketOpenException;

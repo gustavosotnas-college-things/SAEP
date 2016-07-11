@@ -1,4 +1,4 @@
-package com.gustavosotnas.saep.persistencia.model;
+package com.gustavosotnas.saep.persistencia.model.properties;
 
 /**
  * Created by gustavosotnas on 11/07/16.
