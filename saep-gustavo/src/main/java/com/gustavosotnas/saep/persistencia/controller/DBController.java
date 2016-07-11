@@ -24,8 +24,11 @@ public class DBController {
             System.out.println("Colletions criadas com sucesso");
         } catch (MongoCommandException mongocmdex) {
             System.out.println("Collections já criadas anteriormente");
-        } catch (MongoSocketOpenException | MongoTimeoutException mongoconnex){
+        } catch (MongoSocketOpenException mongosockex){
             System.out.println("Não foi possível conectar ao servidor de banco de dados. Ele está rodando?");
+        } catch (MongoTimeoutException mongoconnex) {
+            System.out.println("O tempo de conexão com o banco de dados expirou. Certifique se é possível "+
+                    "conectar à ele.");
         }
     }
 }
