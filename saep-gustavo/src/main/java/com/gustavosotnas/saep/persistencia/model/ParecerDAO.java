@@ -1,12 +1,6 @@
 package com.gustavosotnas.saep.persistencia.model;
 
-import br.ufg.inf.es.saep.sandbox.dominio.Avaliavel;
-import br.ufg.inf.es.saep.sandbox.dominio.Nota;
-import br.ufg.inf.es.saep.sandbox.dominio.ParecerRepository;
-import br.ufg.inf.es.saep.sandbox.dominio.Radoc;
-
-import br.ufg.inf.es.saep.sandbox.dominio.IdentificadorExistente;
-import br.ufg.inf.es.saep.sandbox.dominio.IdentificadorDesconhecido;
+import br.ufg.inf.es.saep.sandbox.dominio.*;
 
 import com.gustavosotnas.saep.persistencia.controller.DBController;
 import com.gustavosotnas.saep.persistencia.model.properties.Collections;
@@ -30,7 +24,7 @@ import org.bson.Document;
  * de Avaliação Docente (CAD) ou automaticamente pelo
  * SAEP.
  *
- * @see br.ufg.inf.es.saep.sandbox.dominio.Parecer
+ * @see Parecer
  * @see Radoc
  */
 public class ParecerDAO implements ParecerRepository {
@@ -88,7 +82,7 @@ public class ParecerDAO implements ParecerRepository {
      *                                existente (já persistido).
      */
     @Override
-    public void persisteParecer(br.ufg.inf.es.saep.sandbox.dominio.Parecer parecer) {
+    public void persisteParecer(Parecer parecer) {
         String idParecer = parecer.getId();
         Document document = DBController.findDocument("id", idParecer, Collections.PARECER_COLLECTION);
         if (document != null) {
@@ -129,7 +123,7 @@ public class ParecerDAO implements ParecerRepository {
      * caso o identificador não defina um parecer.
      */
     @Override
-    public br.ufg.inf.es.saep.sandbox.dominio.Parecer byId(String idParecer) {
+    public Parecer byId(String idParecer) {
         return null;
     }
 
@@ -144,7 +138,7 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public void removeParecer(String idParecer) {
-
+        DBController.deleteDocument("id", idParecer, Collections.PARECER_COLLECTION);
     }
 
     /**
