@@ -146,19 +146,6 @@ public class ParecerDAO implements ParecerRepository {
     }
 
     /**
-     * Recupera o RADOC identificado pelo argumento.
-     *
-     * @param identificador O identificador único do
-     *                      RADOC.
-     * @return O {@code Radoc} correspondente ao
-     * identificador fornecido.
-     */
-    @Override
-    public Radoc radocById(String identificador) {
-        return null;
-    }
-
-    /**
      * Conjunto de relatos de atividades e produtos
      * associados a um docente.
      * <p>
@@ -176,6 +163,19 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public String persisteRadoc(Radoc radoc) {
+        return null;
+    }
+
+    /**
+     * Recupera o RADOC identificado pelo argumento.
+     *
+     * @param identificador O identificador único do
+     *                      RADOC.
+     * @return O {@code Radoc} correspondente ao
+     * identificador fornecido.
+     */
+    @Override
+    public Radoc radocById(String identificador) {
         return null;
     }
 
