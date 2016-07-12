@@ -47,14 +47,14 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public void adicionaNota(String idParecer, Nota nota) {
-        Document parecerDocument = DBController.findDocument("id", idParecer, Collections.PARECER_COLLECTION);
+        Document parecer = DBController.findDocument("id", idParecer, Collections.PARECER_COLLECTION);
 
-        if (parecerDocument != null) {
+        if (parecer != null) {
             removeNota(idParecer, nota.getItemOriginal());
 
             String notaJson = gson.toJson(nota);
-            Document notaParaAdicionar = new Document("notas", Document.parse(notaJson));
-            DBController.updateDocumentByQuery("id", idParecer, Collections.PARECER_COLLECTION, new Document("$push", notaParaAdicionar));
+            Document notaToAdd = new Document("notas", Document.parse(notaJson));
+            DBController.updateDocumentByQuery("id", idParecer, Collections.PARECER_COLLECTION, new Document("$push", notaToAdd));
         } else {
             throw new IdentificadorDesconhecido(getMessage$EntityAlreadyExists(Entities.RADOC_ENTITY, idParecer));
         }
@@ -124,7 +124,11 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public Parecer byId(String idParecer) {
-        return null;
+        Document parecer = DBController.findDocument("id", idParecer, Collections.PARECER_COLLECTION);
+        if (parecer != null) {
+            String parecerJson = gson.toJson(parecer);
+            return gson.fromJson(parecerJson, Parecer.class);
+        }
     }
 
     /**
