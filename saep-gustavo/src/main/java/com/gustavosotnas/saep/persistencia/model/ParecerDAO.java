@@ -129,6 +129,9 @@ public class ParecerDAO implements ParecerRepository {
             String parecerJson = gson.toJson(parecer);
             return gson.fromJson(parecerJson, Parecer.class);
         }
+        else {
+            throw new IdentificadorDesconhecido(getMessage$EntityNotFound(Collections.PARECER_COLLECTION, idParecer));
+        }
     }
 
     /**
