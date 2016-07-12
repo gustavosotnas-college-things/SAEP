@@ -8,6 +8,15 @@ import br.ufg.inf.es.saep.sandbox.dominio.Radoc;
 import br.ufg.inf.es.saep.sandbox.dominio.IdentificadorExistente;
 import br.ufg.inf.es.saep.sandbox.dominio.IdentificadorDesconhecido;
 
+import com.gustavosotnas.saep.persistencia.controller.DBController;
+import com.gustavosotnas.saep.persistencia.model.properties.Collections;
+import com.gustavosotnas.saep.persistencia.model.properties.Entities;
+import static com.gustavosotnas.saep.persistencia.model.properties.Strings.*;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.bson.Document;
+
 /**
  * Created by gustavosotnas on 11/07/16.
  */
@@ -26,29 +35,47 @@ import br.ufg.inf.es.saep.sandbox.dominio.IdentificadorDesconhecido;
  */
 public class ParecerDAO implements ParecerRepository {
 
+    private static Gson gson;
+
+    public ParecerDAO() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Nota.class, new NotaDeserialize());
+        gson = gsonBuilder.create();
+    }
+
     /**
      * Adiciona nota ao parecer.
      *
-     * @param id   O identificador único do parecer.
+     * @param idParecer   O identificador único do parecer.
      * @param nota A alteração a ser acrescentada ao
      * @throws IdentificadorDesconhecido Caso o identificador
      *                                   fornecido não identifique um parecer existente.
      */
     @Override
-    public void adicionaNota(String id, Nota nota) {
+    public void adicionaNota(String idParecer, Nota nota) {
+        Document parecerDocument = DBController.findDocument("id", idParecer, Collections.PARECER_COLLECTION);
 
+        if (parecerDocument != null) {
+            removeNota(idParecer, nota.getItemOriginal());
+
+            String notaJson = gson.toJson(nota);
+            Document notaParaAdicionar = new Document("notas", Document.parse(notaJson));
+            DBController.updateDocumentByQuery("id", idParecer, Collections.PARECER_COLLECTION, new Document("$push", notaParaAdicionar));
+        } else {
+            throw new IdentificadorDesconhecido(getMessage$EntityAlreadyExists(Entities.RADOC_ENTITY, idParecer));
+        }
     }
 
     /**
      * Remove a nota cujo item {@link Avaliavel} original é
      * fornedido.
      *
-     * @param id       O identificador único do parecer.
+     * @param idParecer       O identificador único do parecer.
      * @param original Instância de {@link Avaliavel} que participa
      *                 da {@link Nota} a ser removida como origem.
      */
     @Override
-    public void removeNota(String id, Avaliavel original) {
+    public void removeNota(String idParecer, Avaliavel original) {
 
     }
 
@@ -62,7 +89,14 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public void persisteParecer(br.ufg.inf.es.saep.sandbox.dominio.Parecer parecer) {
+        String idParecer = parecer.getId();
+        Document document = DBController.findDocument("id", idParecer, Collections.PARECER_COLLECTION);
+        if (document != null) {
+            throw new IdentificadorExistente(getMessage$EntityAlreadyExists(Entities.RADOC_ENTITY, idParecer));
+        }
 
+        String parecerJson = gson.toJson(parecer);
+        DBController.setCollection(parecerJson, Collections.PARECER_COLLECTION);
     }
 
     /**
@@ -90,12 +124,12 @@ public class ParecerDAO implements ParecerRepository {
     /**
      * Recupera o parecer pelo identificador.
      *
-     * @param id O identificador do parecer.
+     * @param idParecer O identificador do parecer.
      * @return O parecer recuperado ou o valor {@code null},
      * caso o identificador não defina um parecer.
      */
     @Override
-    public br.ufg.inf.es.saep.sandbox.dominio.Parecer byId(String id) {
+    public br.ufg.inf.es.saep.sandbox.dominio.Parecer byId(String idParecer) {
         return null;
     }
 
@@ -106,10 +140,10 @@ public class ParecerDAO implements ParecerRepository {
      * ou não correspondente a um parecer existente,
      * nenhuma situação excepcional é gerada.
      *
-     * @param id O identificador único do parecer.
+     * @param idParecer O identificador único do parecer.
      */
     @Override
-    public void removeParecer(String id) {
+    public void removeParecer(String idParecer) {
 
     }
 
