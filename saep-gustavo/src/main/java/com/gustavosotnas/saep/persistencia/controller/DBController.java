@@ -53,7 +53,7 @@ public class DBController {
      */
     public static Document setCollection(String JSONdocument, String collectionName) {
         MongoCollection<Document> collection = getCollection(collectionName);
-        Document documentToSave = parseJSON(JSONdocument);
+        Document documentToSave = Document.parse(JSONdocument);
         collection.insertOne(documentToSave);
         return findDocumentById((ObjectId) documentToSave.get("_id"), collectionName);
     }
@@ -118,7 +118,7 @@ public class DBController {
      */
     public static void updateDocument(String atributeName, String atributeValue, String collectionName, String JSONdocument) {
         MongoCollection<Document> collection = getCollection(collectionName);
-        Document documentToUpdate = parseJSON(JSONdocument);
+        Document documentToUpdate = Document.parse(JSONdocument);
         collection.replaceOne(eq(atributeName, atributeValue), documentToUpdate);
     }
 
@@ -161,16 +161,6 @@ public class DBController {
     private static Document findDocumentById(ObjectId mongoObjectId, String collectionName) {
         MongoCollection<Document> collection = getCollection(collectionName);
         return collection.find(eq("_id", mongoObjectId)).first();
-    }
-
-    /**
-     * Converte um JSON para Document.
-     *
-     * @param JSONdocument um documento no formato JSON qualquer.
-     * @return o Document correspondente ao JSON passado por parâmetro.
-     */
-    private static Document parseJSON(String JSONdocument) {
-        return Document.parse(JSONdocument);
     }
 
     /**
