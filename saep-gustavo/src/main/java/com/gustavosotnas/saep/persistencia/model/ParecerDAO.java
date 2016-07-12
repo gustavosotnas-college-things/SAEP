@@ -145,6 +145,8 @@ public class ParecerDAO implements ParecerRepository {
         DBController.deleteDocument("id", idParecer, Collections.PARECER_COLLECTION);
     }
 
+    // *** RADOC ***
+
     /**
      * Conjunto de relatos de atividades e produtos
      * associados a um docente.
@@ -163,7 +165,25 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public String persisteRadoc(Radoc radoc) {
-        return null;
+
+        String idRadoc = radoc.getId();
+        Document radocExisting = DBController.findDocument("id", idRadoc, Collections.RADOC_COLLECTION);
+
+        if (radocExisting != null) {
+            throw new IdentificadorExistente(getMessage$EntityAlreadyExists("Radoc", idRadoc));
+        }
+        else {
+            String radocJSON = gson.toJson(radoc);
+            Document radoc = DBController.setCollection(radocJSON, Collections.RADOC_COLLECTION);
+
+            // Se deu tudo certo...
+            if (radoc != null) {
+                // ... verifica se o Radoc está mesmo no banco de dados
+                String savedRadoc = gson.toJson(radoc);
+                Radoc foundRadoc = gson.fromJson(savedRadoc, Radoc.class);
+                return foundRadoc.getId();
+            }
+        }
     }
 
     /**
