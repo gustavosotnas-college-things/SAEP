@@ -195,7 +195,9 @@ public class ResolucaoDAO implements ResolucaoRepository {
      */
     @Override
     public Tipo tipoPeloCodigo(String codigo) {
-        return null;
+        Document tipo = DBController.findDocument("id", codigo, Collections.TIPO_COLLECTION);
+        String tipoJson = gson.toJson(tipo);
+        return gson.fromJson(tipoJson, Tipo.class);
     }
 
     /**
