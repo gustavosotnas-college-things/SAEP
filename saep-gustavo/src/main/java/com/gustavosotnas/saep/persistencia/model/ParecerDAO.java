@@ -74,6 +74,10 @@ public class ParecerDAO implements ParecerRepository {
     @Override
     public void removeNota(String idParecer, Avaliavel original) {
 
+        String avaliavelJSON = gson.toJson(original);
+        Document originalDocumentToDelete = new Document("notas", new Document("original", Document.parse(avaliavelJSON)));
+        Document query = new Document("$pull", originalDocumentToDelete);
+        DBController.updateDocumentByQuery("id", idParecer, Collections.PARECER_COLLECTION, query);
     }
 
     /**
