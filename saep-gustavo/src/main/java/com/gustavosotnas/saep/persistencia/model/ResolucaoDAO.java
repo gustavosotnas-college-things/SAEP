@@ -1,9 +1,14 @@
 package com.gustavosotnas.saep.persistencia.model;
 
 import br.ufg.inf.es.saep.sandbox.dominio.*;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.gustavosotnas.saep.persistencia.controller.SaepGsonCustomConfiguration;
+import com.gustavosotnas.saep.persistencia.controller.*;
+import com.gustavosotnas.saep.persistencia.model.properties.Collections;
+import static com.gustavosotnas.saep.persistencia.model.properties.Strings.*;
+
+import com.google.gson.Gson;
+import com.gustavosotnas.saep.persistencia.model.properties.Entities;
+import org.bson.Document;
 
 import java.util.List;
 
@@ -25,7 +30,7 @@ public class ResolucaoDAO implements ResolucaoRepository {
     private static Gson gson;
 
     /**
-     * Construtor padrão do ParecerDAO. Ele inicializa uma configuração
+     * Construtor padrão do ResolucaoDAO. Ele inicializa uma configuração
      * de serialização e desserialização personalizada do JSON.
      */
     public ResolucaoDAO() {
@@ -33,22 +38,6 @@ public class ResolucaoDAO implements ResolucaoRepository {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Nota.class, new SaepGsonCustomConfiguration());
         gson = gsonBuilder.create();
-    }
-
-    /**
-     * Recupera a instância de {@code Resolucao} correspondente
-     * ao identificador.
-     *
-     * @param id O identificador único da resolução a
-     *           ser recuperada.
-     * @return {@code Resolucao} identificada por {@code id}.
-     * O retorno {@code null} indica que não existe resolução
-     * com o identificador fornecido.
-     * @see #persiste(Resolucao)
-     */
-    @Override
-    public Resolucao byId(String id) {
-        return null;
     }
 
     /**
@@ -70,7 +59,52 @@ public class ResolucaoDAO implements ResolucaoRepository {
      */
     @Override
     public String persiste(Resolucao resolucao) {
-        return null;
+
+        String idResolucao = resolucao.getId();
+        if((idResolucao != null) && (!idResolucao.equals(""))) {
+            Document foundResolucao = DBController.findDocument("id", idResolucao, Collections.RESOLUCAO_COLLECTION);
+            if(foundResolucao == null) {
+                String resolucaoJson = gson.toJson(resolucao);
+                Document savedResolucaoDocument = DBController.setCollection(resolucaoJson, Collections.RESOLUCAO_COLLECTION);
+                if(savedResolucaoDocument != null) {
+                    String savedResolucaoJson = gson.toJson(savedResolucaoDocument);
+                    Resolucao savedResolucao = gson.fromJson(savedResolucaoJson, Resolucao.class);
+                    return savedResolucao.getId();
+                }
+                else
+                    return null;
+            }
+            else {
+                throw new IdentificadorExistente(getMessage$EntityAlreadyExists(Entities.RESOLUCAO_ENTITY, idResolucao));
+            }
+        }
+        else {
+            throw new CampoExigidoNaoFornecido("id");
+        }
+    }
+
+    /**
+     * Recupera a instância de {@code Resolucao} correspondente
+     * ao identificador.
+     *
+     * @param id O identificador único da resolução a
+     *           ser recuperada.
+     * @return {@code Resolucao} identificada por {@code id}.
+     * O retorno {@code null} indica que não existe resolução
+     * com o identificador fornecido.
+     * @see #persiste(Resolucao)
+     */
+    @Override
+    public Resolucao byId(String id) {
+
+        Document foundResolucao = DBController.findDocument("id", id, Collections.RESOLUCAO_COLLECTION);
+        if (foundResolucao != null) { // se a resolução não foi encontrada...
+            // ... coloque a nova resolução no banco de dados.
+            String resolucaoJson = gson.toJson(foundResolucao);
+            return gson.fromJson(resolucaoJson, Resolucao.class);
+        }
+        else
+            return null;
     }
 
     /**
@@ -86,7 +120,7 @@ public class ResolucaoDAO implements ResolucaoRepository {
      */
     @Override
     public boolean remove(String identificador) {
-        return false;
+        return DBController.deleteDocument("id", identificador, Collections.RESOLUCAO_COLLECTION);
     }
 
     /**
