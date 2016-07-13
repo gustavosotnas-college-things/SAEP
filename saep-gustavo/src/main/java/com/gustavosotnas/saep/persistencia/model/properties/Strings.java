@@ -26,4 +26,9 @@ public class Strings {
     public static String getMessage$EntityAlreadyExists (String nomeEntidade, String idEntidade) {
         return "ID da entidade " + nomeEntidade + " " + idEntidade + " já existe.";
     }
+
+    public static String getMessage$ThereIsParecerRelatedRadoc (String idRadoc) {
+        return "Existe um parecer relacionado com o radoc " + idRadoc + "no banco de dados. Não é permitido esse radoc.";
+    }
+
 }
