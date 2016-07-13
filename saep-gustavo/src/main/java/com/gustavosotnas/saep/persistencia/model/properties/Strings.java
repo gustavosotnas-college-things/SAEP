@@ -29,8 +29,14 @@ public class Strings {
         return "ID da entidade " + nomeEntidade + " " + idEntidade + " já existe.";
     }
 
+    /**
+     * Gera mensagem de que existe um parecer relacionado ao Radoc em específico.
+     *
+     * @param idRadoc identificador do Radoc.
+     * @return uma string gerada dinamicamente que exibe mensagem de "existe um parecer relacionado".
+     */
     public static String getMessage$ThereIsParecerRelatedRadoc (String idRadoc) {
-        return "Existe um parecer relacionado com o radoc " + idRadoc + "no banco de dados. Não é permitido esse radoc.";
+        return "Existe um parecer relacionado com o radoc " + idRadoc + " no banco de dados. Não é permitido esse radoc.";
     }
 
 }
