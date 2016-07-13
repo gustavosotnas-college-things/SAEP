@@ -217,6 +217,15 @@ public class ResolucaoDAO implements ResolucaoRepository {
      */
     @Override
     public List<Tipo> tiposPeloNome(String nome) {
-        return null;
+
+        List<Tipo> listaTipo = new ArrayList<>();
+        Iterable<Document> tipoIterable = DBController.getDocumentsSimilarTo("nome", nome, Collections.TIPO_COLLECTION);
+
+        String tipoJson;
+        for (Document i : tipoIterable) {
+            tipoJson = i.toJson();
+            listaTipo.add(gson.fromJson(tipoJson, Tipo.class));
+        }
+        return listaTipo;
     }
 }
