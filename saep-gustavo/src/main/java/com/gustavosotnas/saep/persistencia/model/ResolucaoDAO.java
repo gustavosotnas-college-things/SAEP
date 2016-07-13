@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.gustavosotnas.saep.persistencia.model.properties.Entities;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -131,7 +132,16 @@ public class ResolucaoDAO implements ResolucaoRepository {
      */
     @Override
     public List<String> resolucoes() {
-        return null;
+
+        List<String> resolucoesList = new ArrayList<>();
+        Iterable<Document> resolucoesIterable = DBController.getAllDocuments(Collections.RESOLUCAO_COLLECTION);
+
+        String idResolucao;
+        for (Document i : resolucoesIterable) {
+            idResolucao = i.getString("id");
+            resolucoesList.add(idResolucao);
+        }
+        return resolucoesList;
     }
 
     /**
