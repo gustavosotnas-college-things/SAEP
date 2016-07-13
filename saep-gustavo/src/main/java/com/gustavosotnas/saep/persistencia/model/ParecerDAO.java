@@ -32,6 +32,7 @@ public class ParecerDAO implements ParecerRepository {
     private static Gson gson;
 
     public ParecerDAO() {
+
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Nota.class, new NotaDeserialize());
         gson = gsonBuilder.create();
@@ -47,16 +48,16 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public void adicionaNota(String idParecer, Nota nota) {
+
         Document parecer = DBController.findDocument("id", idParecer, Collections.PARECER_COLLECTION);
-
-        if (parecer != null) {
+        if (parecer != null) { // Se deu tudo certo...
+            // Remove a nota existente e adiciona a nova nota
             removeNota(idParecer, nota.getItemOriginal());
-
             String notaJson = gson.toJson(nota);
             Document notaToAdd = new Document("notas", Document.parse(notaJson));
             DBController.updateDocumentByQuery("id", idParecer, Collections.PARECER_COLLECTION, new Document("$push", notaToAdd));
         } else {
-            throw new IdentificadorDesconhecido(getMessage$EntityAlreadyExists(Entities.RADOC_ENTITY, idParecer));
+            throw new IdentificadorDesconhecido(getMessage$EntityNotFound(Entities.PARECER_ENTITY, idParecer));
         }
     }
 
@@ -83,14 +84,17 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public void persisteParecer(Parecer parecer) {
+
         String idParecer = parecer.getId();
         Document document = DBController.findDocument("id", idParecer, Collections.PARECER_COLLECTION);
-        if (document != null) {
-            throw new IdentificadorExistente(getMessage$EntityAlreadyExists(Entities.RADOC_ENTITY, idParecer));
+        if (document == null) { // se não existe o determinado identificador...
+            // ... salva o parecer no banco de dados.
+            String parecerJson = gson.toJson(parecer);
+            DBController.setCollection(parecerJson, Collections.PARECER_COLLECTION);
         }
-
-        String parecerJson = gson.toJson(parecer);
-        DBController.setCollection(parecerJson, Collections.PARECER_COLLECTION);
+        else {
+            throw new IdentificadorExistente(getMessage$EntityAlreadyExists(Entities.PARECER_ENTITY, idParecer));
+        }
     }
 
     /**
@@ -130,7 +134,7 @@ public class ParecerDAO implements ParecerRepository {
             return gson.fromJson(parecerJson, Parecer.class);
         }
         else {
-            throw new IdentificadorDesconhecido(getMessage$EntityNotFound(Collections.PARECER_COLLECTION, idParecer));
+            return null;
         }
     }
 
@@ -172,20 +176,23 @@ public class ParecerDAO implements ParecerRepository {
         String idRadoc = radoc.getId();
         Document radocExisting = DBController.findDocument("id", idRadoc, Collections.RADOC_COLLECTION);
 
-        if (radocExisting != null) {
-            throw new IdentificadorExistente(getMessage$EntityAlreadyExists("Radoc", idRadoc));
-        }
-        else {
-            String radocJSON = gson.toJson(radoc);
-            Document radoc = DBController.setCollection(radocJSON, Collections.RADOC_COLLECTION);
 
+        if (radocExisting == null) { // se não existe esse radoc no DB...
+            String radocJSON = gson.toJson(radoc);
+            Document existingRadoc = DBController.setCollection(radocJSON, Collections.RADOC_COLLECTION);
             // Se deu tudo certo...
-            if (radoc != null) {
+            if (existingRadoc != null) {
                 // ... verifica se o Radoc está mesmo no banco de dados
-                String savedRadoc = gson.toJson(radoc);
+                String savedRadoc = gson.toJson(existingRadoc);
                 Radoc foundRadoc = gson.fromJson(savedRadoc, Radoc.class);
                 return foundRadoc.getId();
             }
+            else {
+                return null;
+            }
+        }
+        else {
+            throw new IdentificadorExistente(getMessage$EntityAlreadyExists(Entities.RADOC_ENTITY, idRadoc));
         }
     }
 
