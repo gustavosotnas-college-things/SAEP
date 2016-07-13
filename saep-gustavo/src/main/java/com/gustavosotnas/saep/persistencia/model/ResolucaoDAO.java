@@ -154,6 +154,15 @@ public class ResolucaoDAO implements ResolucaoRepository {
     @Override
     public void persisteTipo(Tipo tipo) {
 
+        String idTipo = tipo.getId();
+        Document foundTipo = DBController.findDocument("id", tipo.getId(), Collections.TIPO_COLLECTION);
+        if(foundTipo == null) {
+            String tipoJson = gson.toJson(tipo);
+            DBController.setCollection(tipoJson, Collections.TIPO_COLLECTION);
+        }
+        else {
+            throw new IdentificadorExistente(getMessage$EntityAlreadyExists(Entities.TIPO_ENTITY, idTipo));
+        }
     }
 
     /**
