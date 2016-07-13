@@ -39,4 +39,13 @@ public class Strings {
         return "Existe um parecer relacionado com o radoc " + idRadoc + " no banco de dados. Não é permitido esse radoc.";
     }
 
+    /**
+     * Gera mensagem de que existe uma resolução relacionada ao Tipo em específico.
+     *
+     * @param idTipo identificador do Tipo.
+     * @return uma string gerada dinamicamente que exibe mensagem de "existe uma resolução relacionada".
+     */
+    public static String getMessage$ThereIsResolucaoRelatedTipo (String idTipo) {
+        return "Existe uma resolução relacionada com o tipo " + idTipo + " no banco de dados. Não é permitida essa operação.";
+    }
 }
