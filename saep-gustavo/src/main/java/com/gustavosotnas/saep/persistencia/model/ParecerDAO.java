@@ -206,7 +206,16 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public Radoc radocById(String identificador) {
-        return null;
+
+        Document radoc = DBController.findDocument("id", identificador, Collections.RADOC_COLLECTION);
+        if (radoc != null) { // se deu tudo certo...
+            // ... desserializa o radoc desejado do banco de dados
+            String radocJson = gson.toJson(radoc);
+            return gson.fromJson(radocJson, Radoc.class);
+        }
+        else {
+            return null;
+        }
     }
 
     /**
