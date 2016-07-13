@@ -1,7 +1,9 @@
 package com.gustavosotnas.saep.persistencia.model.properties;
 
 /**
- * Created by gustavosotnas on 12/07/16.
+ * Reúne mensagens de retorno para usuário, de forma separada do resto do SAEP.
+ *
+ * @author gustavosotnas
  */
 public class Strings {
 

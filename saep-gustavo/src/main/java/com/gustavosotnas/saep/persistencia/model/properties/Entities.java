@@ -1,9 +1,10 @@
 package com.gustavosotnas.saep.persistencia.model.properties;
 
 /**
- * Created by gustavosotnas on 11/07/16.
+ * "Enum" de entidades do banco de dados do SAEP.
+ *
+ * @author gustavosotnas
  */
-// "enum" de entidades do banco de dados do SAEP
 public class Entities {
 
     public static final String RADOC_ENTITY = "radoc";

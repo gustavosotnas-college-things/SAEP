@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 /**
  * Classe que reúne funções úteis para manipular o banco de dados MongoDB no SAEP.
  *
- * Created by gustavosotnas on 10/07/16.
+ * @author gustavosotnas
  */
 public class DBController {
 

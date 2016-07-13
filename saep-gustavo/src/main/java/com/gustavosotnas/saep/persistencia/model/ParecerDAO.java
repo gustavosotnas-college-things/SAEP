@@ -2,7 +2,7 @@ package com.gustavosotnas.saep.persistencia.model;
 
 import br.ufg.inf.es.saep.sandbox.dominio.*;
 
-import com.gustavosotnas.saep.persistencia.controller.DBController;
+import com.gustavosotnas.saep.persistencia.controller.*;
 import com.gustavosotnas.saep.persistencia.model.properties.Collections;
 import com.gustavosotnas.saep.persistencia.model.properties.Entities;
 import static com.gustavosotnas.saep.persistencia.model.properties.Strings.*;
@@ -10,10 +10,6 @@ import static com.gustavosotnas.saep.persistencia.model.properties.Strings.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.Document;
-
-/**
- * Created by gustavosotnas on 11/07/16.
- */
 
 /**
  * Oferece noção de coleções de pareceres em memória.
@@ -26,15 +22,21 @@ import org.bson.Document;
  *
  * @see Parecer
  * @see Radoc
+ *
+ * @author gustavosotnas
  */
 public class ParecerDAO implements ParecerRepository {
 
     private static Gson gson;
 
+    /**
+     * Construtor padrão do ParecerDAO. Ele inicializa uma configuração
+     * de serialização e desserialização personalizada do JSON.
+     */
     public ParecerDAO() {
 
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Nota.class, new NotaDeserialize());
+        gsonBuilder.registerTypeAdapter(Nota.class, new SaepGsonCustomConfiguration());
         gson = gsonBuilder.create();
     }
 
@@ -122,19 +124,21 @@ public class ParecerDAO implements ParecerRepository {
         if (parecerDocument != null){
             String parecerJson = gson.toJson(parecerDocument);
 
-            Parecer parecerEncontrado = gson.fromJson(parecerJson, Parecer.class);
+            Parecer foundParecer = gson.fromJson(parecerJson, Parecer.class);
 
             Parecer newParecer = new Parecer(
-                    parecerEncontrado.getId(),
-                    parecerEncontrado.getResolucao(),
-                    parecerEncontrado.getRadocs(),
-                    parecerEncontrado.getPontuacoes(),
+                    foundParecer.getId(),
+                    foundParecer.getResolucao(),
+                    foundParecer.getRadocs(),
+                    foundParecer.getPontuacoes(),
                     fundamentacao,
-                    parecerEncontrado.getNotas()
+                    foundParecer.getNotas()
             );
+
+            String idNewParecer = newParecer.getId();
             String newParecerJson = gson.toJson(newParecer);
 
-            DBController.updateDocument("id", newParecer.getId(), newParecerJson, Collections.PARECER_COLLECTION);
+            DBController.updateDocument("id", idNewParecer, newParecerJson, Collections.PARECER_COLLECTION);
 
         }
         else {
@@ -272,10 +276,7 @@ public class ParecerDAO implements ParecerRepository {
     private static boolean doesItHaveRelatedParecer(String idRadoc) {
 
         Document query = new Document("radoc_temp_query", idRadoc);
-
-        //Document foundParecer = dbHelper.findObjectFromCollectionWithFilter(parecerCollection, query);
         Document foundParecer = DBController.findDocumentByQuery(Collections.PARECER_COLLECTION, query);
-
         return foundParecer != null; // true, quando foundParecer != null
     }
 }

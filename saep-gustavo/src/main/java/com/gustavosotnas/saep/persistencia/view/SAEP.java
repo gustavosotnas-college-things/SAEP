@@ -3,7 +3,9 @@ package com.gustavosotnas.saep.persistencia.view;
 import com.gustavosotnas.saep.persistencia.controller.DBController;
 
 /**
- * Created by gustavosotnas on 10/07/16.
+ * Classe de teste que inicia o programa.
+ *
+ * @author gustavosotnas
  */
 public class SAEP {
     public static void main(String args[]) {
