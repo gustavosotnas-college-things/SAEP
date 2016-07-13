@@ -10,4 +10,5 @@ public class Collections {
     public static final String PARECER_COLLECTION = "parecer_collection";
     public static final String RADOC_COLLECTION = "radoc_collection";
     public static final String RESOLUCAO_COLLECTION = "resolucao_collection";
+    public static final String TIPO_COLLECTION = "tipo_collection";
 }
