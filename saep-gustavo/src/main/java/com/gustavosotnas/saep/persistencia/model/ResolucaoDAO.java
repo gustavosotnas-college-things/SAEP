@@ -175,6 +175,14 @@ public class ResolucaoDAO implements ResolucaoRepository {
     @Override
     public void removeTipo(String codigo) {
 
+        Document query = new Document("regras.tipoRelato", codigo);
+
+        if (DBController.findDocumentByQuery(Collections.RESOLUCAO_COLLECTION, query) == null) {
+            DBController.deleteDocument("id", codigo, Collections.TIPO_COLLECTION);
+        }
+        else {
+            throw new ResolucaoUsaTipoException (getMessage$ThereIsResolucaoRelatedTipo(codigo));
+        }
     }
 
     /**
