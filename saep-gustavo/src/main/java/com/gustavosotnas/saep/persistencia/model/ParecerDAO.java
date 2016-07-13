@@ -117,6 +117,29 @@ public class ParecerDAO implements ParecerRepository {
     @Override
     public void atualizaFundamentacao(String parecer, String fundamentacao) {
 
+        Document parecerDocument = DBController.findDocument("id", parecer, Collections.PARECER_COLLECTION);
+
+        if (parecerDocument != null){
+            String parecerJson = gson.toJson(parecerDocument);
+
+            Parecer parecerEncontrado = gson.fromJson(parecerJson, Parecer.class);
+
+            Parecer newParecer = new Parecer(
+                    parecerEncontrado.getId(),
+                    parecerEncontrado.getResolucao(),
+                    parecerEncontrado.getRadocs(),
+                    parecerEncontrado.getPontuacoes(),
+                    fundamentacao,
+                    parecerEncontrado.getNotas()
+            );
+            String newParecerJson = gson.toJson(newParecer);
+
+            DBController.updateDocument("id", newParecer.getId(), newParecerJson, Collections.PARECER_COLLECTION);
+
+        }
+        else {
+            throw new IdentificadorDesconhecido(getMessage$EntityNotFound(Collections.PARECER_COLLECTION, parecer));
+        }
     }
 
     /**
