@@ -231,6 +231,28 @@ public class ParecerDAO implements ParecerRepository {
      */
     @Override
     public void removeRadoc(String identificador) {
+        if (!doesItHaveRelatedParecer(identificador)) {
+            DBController.deleteDocument("id", identificador, Collections.RADOC_COLLECTION);
+        }
+        else {
+            throw new ExisteParecerReferenciandoRadoc(getMessage$ThereIsParecerRelatedRadoc(identificador));
+        }
+    }
 
+    /**
+     * Verifica se existe algum parecer referenciado a um RADOC.
+     *
+     * @param idRadoc o identificador do RADOC
+     * @return {@code true}, caso haja um parecer referenciando o RADOC ou
+     *         {@code false}, caso contrário.
+     */
+    private static boolean doesItHaveRelatedParecer(String idRadoc) {
+
+        Document query = new Document("radoc_temp_query", idRadoc);
+
+        //Document foundParecer = dbHelper.findObjectFromCollectionWithFilter(parecerCollection, query);
+        Document foundParecer = DBController.findDocumentByQuery(Collections.PARECER_COLLECTION, query);
+
+        return foundParecer != null; // true, quando foundParecer != null
     }
 }
